@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+    <bean id="taskService" class="com.manubogino.taskpractice.services.implementation.TaskServiceImpl"/>
+    <bean id="parser" class="com.manubogino.taskpractice.parsers.implementation.JacksonJsonParser">
+        <constructor-arg ref="objectMapper"/>
+    </bean>
+
+    <!-- Controllers -->
+    <bean id="taskController" class="com.manubogino.taskpractice.controllers.TaskController">
+        <constructor-arg ref="parser"/>
+        <constructor-arg ref="taskService"/>
+        <constructor-arg ref="validator"/>
+    </bean>
+
+    <!-- Validators -->
+    <bean id="validationBootstrap" class="javax.validation.Validation$GenericBootstrapImpl"/>
+    <bean id="validatorConfig" factory-bean="validationBootstrap" factory-method="configure"/>
+    <bean id="validatorFactory" factory-bean="validatorConfig" factory-method="buildValidatorFactory"/>
+    <bean id="validator" factory-bean="validatorFactory" factory-method="getValidator"/>
+</beans>
