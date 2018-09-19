@@ -1,26 +1,17 @@
 package com.manubogino.taskpractice.models.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import java.util.Date;
 
 public class TaskResponse {
     private int id;
-
     private String name;
-
     private String description;
-
     private String userId;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date creationDate;
-
-    public TaskResponse(int id, String name, String description, String user, Date creationDate) {
-        super();
-
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.userId = user;
-        this.creationDate = creationDate;
-    }
 
     public int getId() {
         return id;

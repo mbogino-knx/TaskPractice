@@ -10,7 +10,6 @@ public class User {
     private String lastName;
 
     public User() {
-
     }
 
     public int getId() {

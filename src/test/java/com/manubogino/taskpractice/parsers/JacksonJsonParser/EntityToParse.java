@@ -1,4 +1,4 @@
-package com.manubogino.taskpractice.parsers;
+package com.manubogino.taskpractice.parsers.JacksonJsonParser;
 
 class EntityToParse {
     private int id;

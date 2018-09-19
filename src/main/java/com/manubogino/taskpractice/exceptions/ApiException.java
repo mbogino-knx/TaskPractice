@@ -1,6 +1,6 @@
 package com.manubogino.taskpractice.exceptions;
 
-import org.eclipse.jetty.http.HttpStatus;
+import org.apache.http.HttpStatus;
 
 public abstract class ApiException extends Exception {
     private String code;
@@ -15,7 +15,7 @@ public abstract class ApiException extends Exception {
     }
 
     public ApiException() {
-        this("internal_error", "Internal Server Error", HttpStatus.INTERNAL_SERVER_ERROR_500);
+        this("internal_error", "Internal Server Error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
     }
 
     public String getDescription() {

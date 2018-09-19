@@ -1,12 +1,14 @@
 package com.manubogino.taskpractice.controllers;
 
 import com.manubogino.taskpractice.exceptions.ApiException;
+import com.manubogino.taskpractice.exceptions.BadRequestApiException;
+import com.manubogino.taskpractice.models.ValidationResult;
 import com.manubogino.taskpractice.models.request.TaskRequest;
 import com.manubogino.taskpractice.models.response.CreateTaskResponse;
 import com.manubogino.taskpractice.models.response.TaskResponse;
 import com.manubogino.taskpractice.parsers.Parser;
 import com.manubogino.taskpractice.services.TaskService;
-import org.eclipse.jetty.http.HttpStatus;
+import org.apache.http.HttpStatus;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -36,11 +38,13 @@ public class TaskController extends BaseController {
         validateResponse(response);
 
         TaskRequest newTask = parser.parseToObject(request.body(), TaskRequest.class);
-        validateRequestBody(newTask);
-        CreateTaskResponse result = taskService.addTask(newTask);
-
-        response.status(HttpStatus.OK_200);
-        return parser.parseToString(result);
+        ValidationResult errorsList = validateRequestBody(newTask);
+        if (errorsList.getErrors().isEmpty()) {
+            CreateTaskResponse result = taskService.addTask(newTask);
+            response.status(HttpStatus.SC_CREATED);
+            return parser.parseToString(result);
+        }
+        throw new BadRequestApiException(parser.parseToString(errorsList));
     }
 
     private String edit(Request request, Response response) throws Exception {
