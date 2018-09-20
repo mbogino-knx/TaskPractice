@@ -1,12 +1,14 @@
 package com.manubogino.taskpractice.controllers;
 
-import com.manubogino.taskpractice.exceptions.ApiException;
-import com.manubogino.taskpractice.exceptions.BadRequestApiException;
+import com.manubogino.taskpractice.models.ErrorModel;
+import com.manubogino.taskpractice.models.ValidationResult;
 import spark.Request;
 import spark.Response;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -27,13 +29,16 @@ abstract class BaseController {
         Objects.requireNonNull(response, RESPONSE_IS_REQUIRED_MESSAGE);
     }
 
-    void validateRequestBody(Object body) throws ApiException {
+    ValidationResult validateRequestBody(Object body) {
         Set<ConstraintViolation<Object>> validationErrors = validator.validate(body);
+        List<ErrorModel> errors = new ArrayList<>();
+        ValidationResult result = new ValidationResult();
+        result.setMessage("Los siguientes campos arrojaron errores de validación");
         if (!validationErrors.isEmpty()) {
-            StringBuffer errorBuffer = new StringBuffer();
-            errorBuffer.append("Fields with errors:");
-            validationErrors.forEach(e -> errorBuffer.append(String.format(" [%s]", e.getMessage())));
-            throw new BadRequestApiException(errorBuffer.toString());
+            validationErrors.forEach(e ->
+                    errors.add(new ErrorModel(e.getPropertyPath().toString(), e.getMessage())));
         }
+        result.setErrors(errors);
+        return result;
     }
 }

@@ -22,7 +22,13 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public CreateTaskResponse addTask(TaskRequest task) {
         int id = taskMap.size() + 1; //Esto va a ser reemplazado por el id autonumerico q la BD devuelva
-        Task newTask = new Task(id, task.getName(), task.getDescription(), user, new Date());
+        Task newTask = new Task();
+        newTask.setId(id);
+        newTask.setName(task.getName());
+        newTask.setDescription(task.getDescription());
+        newTask.setUserId(user);
+        newTask.setCreationDate(new Date());
+
         taskMap.put(id, newTask);
         return new CreateTaskResponse(id);
     }
@@ -37,7 +43,7 @@ public class TaskServiceImpl implements TaskService {
             oldTask.setDescription(newTask.getDescription());
         if (newTask.getName() != null)
             oldTask.setName(newTask.getName());
-        return new TaskResponse(idTask, oldTask.getName(), oldTask.getDescription(), oldTask.getUserId(), oldTask.getCreationDate());
+        return map(oldTask);
     }
 
     public void deleteTask(int idTask) {
@@ -46,27 +52,33 @@ public class TaskServiceImpl implements TaskService {
 
     public TaskResponse getTask(int idTask) {
         Task task = taskMap.get(idTask);
-        return new TaskResponse(task.getId(), task.getName(), task.getDescription(), task.getUserId(), task.getCreationDate());
+        return map(task);
     }
 
     public List<TaskResponse> getTasks() {
         List<Task> tasks = new ArrayList<>(taskMap.values());
         List<TaskResponse> result = new ArrayList<>();
         for (Task task : tasks) {
-            result.add(new TaskResponse(task.getId(), task.getName(), task.getDescription(), task.getUserId(), task.getCreationDate()));
+            result.add(map(task));
         }
         return result;
     }
 
     public void shareTask() {
-
     }
 
     public List<?> getUsers(int idTask) {
         return null;
     }
 
-    /*private TaskResponse map (Task task){
-        TaskResponse response = new TaskResponse(){};
-    }*/
+    private TaskResponse map(Task task) {
+        TaskResponse response = new TaskResponse();
+        response.setId(task.getId());
+        response.setName(task.getName());
+        response.setDescription(task.getDescription());
+        response.setUserId(task.getUserId());
+        response.setCreationDate(task.getCreationDate());
+
+        return response;
+    }
 }

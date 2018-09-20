@@ -1,8 +1,7 @@
-package com.manubogino.taskpractice.parsers;
+package com.manubogino.taskpractice.parsers.JacksonJsonParser;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manubogino.taskpractice.exceptions.ApiException;
-import com.manubogino.taskpractice.exceptions.BadRequestApiException;
+import com.manubogino.taskpractice.exceptions.ParserException;
 import com.manubogino.taskpractice.parsers.implementation.JacksonJsonParser;
 import org.junit.Test;
 
@@ -14,12 +13,12 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class JacksonJsonParserTests {
+public class ParseToObjectTests {
     private ObjectMapper mapper;
     private JacksonJsonParser parser;
 
     @Test
-    public void parserShouldReturnParsedObjectWhenStringIsValid() throws ApiException {
+    public void parseToObjectShouldReturnParsedObjectWhenStringIsValid() throws ParserException {
         final int id = 2;
         final String name = "nameToParse";
 
@@ -35,19 +34,19 @@ public class JacksonJsonParserTests {
     }
 
     @Test
-    public void parserToObjectShouldThrowBadRequestApiExceptionWhenParserThrowException() throws IOException {
+    public void parseToObjectShouldThrowParserExceptionWhenParserThrowException() throws IOException {
         mapper = mock(ObjectMapper.class);
         when(mapper.readValue(anyString(), eq(EntityToParse.class))).thenThrow(new IOException());
         parser = new JacksonJsonParser(mapper);
 
-        assertThrows(BadRequestApiException.class, () -> parser.parseToObject("", EntityToParse.class));
+        assertThrows(ParserException.class, () -> parser.parseToObject("", EntityToParse.class));
     }
 
     @Test
-    public void parserToObjectShouldThrowBadRequestApiExceptionWhenStringIsNull() {
+    public void parseToObjectShouldThrowParserExceptionWhenStringIsNull() {
         mapper = new ObjectMapper();
         parser = new JacksonJsonParser(mapper);
 
-        assertThrows(BadRequestApiException.class, () -> parser.parseToObject(null, EntityToParse.class));
+        assertThrows(ParserException.class, () -> parser.parseToObject(null, EntityToParse.class));
     }
 }

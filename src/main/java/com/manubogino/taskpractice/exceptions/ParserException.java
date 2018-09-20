@@ -2,20 +2,19 @@ package com.manubogino.taskpractice.exceptions;
 
 import org.apache.http.HttpStatus;
 
-public abstract class ApiException extends Exception {
+public class ParserException extends Exception {
     private String code;
     private String description;
     private Integer statusCode;
 
-    public ApiException(String code, String description, Integer statusCode) {
-        super(description);
+    private ParserException(String code, String description, int statusCode) {
         this.code = code;
         this.description = description;
         this.statusCode = statusCode;
     }
 
-    public ApiException() {
-        this("internal_error", "Internal Server Error", HttpStatus.SC_INTERNAL_SERVER_ERROR);
+    public ParserException(String description) {
+        this("parser_exception", description, HttpStatus.SC_INTERNAL_SERVER_ERROR);
     }
 
     public String getDescription() {

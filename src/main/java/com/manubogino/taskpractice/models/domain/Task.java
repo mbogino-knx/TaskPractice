@@ -16,17 +16,9 @@ public class Task {
     private String description;
 
     private String userId;
+
+    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private Date creationDate;
-
-    public Task(int id, String name, String description, String user, Date creationDate) {
-        super();
-
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.userId = user;
-        this.creationDate = creationDate;
-    }
 
     public int getId() {
         return id;
