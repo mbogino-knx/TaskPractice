@@ -4,19 +4,19 @@ class EntityToParse {
     private int id;
     private String name;
 
-    int getId() {
+    public int getId() {
         return id;
     }
 
-    void setId(int id) {
+    public void setId(int id) {
         this.id = id;
     }
 
-    String getName() {
+    public String getName() {
         return name;
     }
 
-    void setName(String name) {
+    public void setName(String name) {
         this.name = name;
     }
 }
