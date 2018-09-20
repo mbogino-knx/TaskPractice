@@ -29,21 +29,7 @@ abstract class BaseController {
         Objects.requireNonNull(response, RESPONSE_IS_REQUIRED_MESSAGE);
     }
 
-/*    void validateRequestBody(Object body) throws ApiException {
-        Set<ConstraintViolation<Object>> validationErrors = validator.validate(body);
-        if (!validationErrors.isEmpty()) {
-            StringBuffer errorBuffer = new StringBuffer();
-            errorBuffer.append("Fields with errors:");
-            validationErrors.forEach(e -> errorBuffer.append(String.format(" [%s]", e.getPropertyPath(), e.getMessage())));
-            List<ErrorModel> errors = new ArrayList<>();
-            validationErrors.forEach(e ->
-                    errors.add(new ErrorModel(e.getPropertyPath().toString(), e.getMessage()))
-            );
-            throw new BadRequestApiException(errorBuffer.toString());
-        }
-    }*/
-
-    public ValidationResult validateRequestBody(Object body) {
+    ValidationResult validateRequestBody(Object body) {
         Set<ConstraintViolation<Object>> validationErrors = validator.validate(body);
         List<ErrorModel> errors = new ArrayList<>();
         ValidationResult result = new ValidationResult();

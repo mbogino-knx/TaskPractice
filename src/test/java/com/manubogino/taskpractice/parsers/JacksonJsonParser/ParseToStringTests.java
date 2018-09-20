@@ -1,8 +1,8 @@
 package com.manubogino.taskpractice.parsers.JacksonJsonParser;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.manubogino.taskpractice.exceptions.ApiException;
-import com.manubogino.taskpractice.exceptions.BadRequestApiException;
+import com.manubogino.taskpractice.exceptions.ParserException;
 import com.manubogino.taskpractice.parsers.implementation.JacksonJsonParser;
 import org.junit.Test;
 
@@ -19,18 +19,17 @@ public class ParseToStringTests {
     private JacksonJsonParser parser;
 
     @Test
-    public void parseToStringShouldReturnStringWhenObjectIsValid() throws ApiException {
+    public void parseToStringShouldReturnStringWhenObjectIsValid() throws ParserException {
         final int id = 2;
         final String name = "nameToParse";
         final String parsed = String.format("{\"id\":%d,\"name\":\"%s\"}", id, name);
-
-        mapper = new ObjectMapper();
-        parser = new JacksonJsonParser(mapper);
 
         EntityToParse objectToParse = new EntityToParse();
         objectToParse.setId(id);
         objectToParse.setName(name);
 
+        mapper = new ObjectMapper();
+        parser = new JacksonJsonParser(mapper);
         String result = parser.parseToString(objectToParse);
 
         assertNotNull(result);
@@ -39,20 +38,21 @@ public class ParseToStringTests {
     }
 
     @Test
-    public void parseToStringShouldThrowBadRequestApiExceptionWhenParserThrowException() throws IOException {
+    public void parseToStringShouldThrowParserExceptionWhenParserThrowException() throws IOException {
         mapper = mock(ObjectMapper.class);
-        when(mapper.writeValueAsString(any())).thenThrow(new IOException());
+        when(mapper.writeValueAsString(any())).thenThrow(new JsonProcessingException("") {
+        });
         parser = new JacksonJsonParser(mapper);
-
-        assertThrows(BadRequestApiException.class, () -> parser.parseToString(new EntityToParse()));
+        assertThrows(ParserException.class, () -> parser.parseToString(new EntityToParse()));
     }
 
     @Test
-    public void parseToStringShouldThrowBadRequestApiExceptionWhenObjectIsNull() throws IOException {
+    public void parseToStringShouldThrowParserExceptionWhenObjectIsNull() throws IOException {
         mapper = mock(ObjectMapper.class);
-        when(mapper.writeValueAsString(any())).thenThrow(new IOException());
+        when(mapper.writeValueAsString(any())).thenThrow(new JsonProcessingException("") {
+        });
         parser = new JacksonJsonParser(mapper);
 
-        assertThrows(BadRequestApiException.class, () -> parser.parseToString(null));
+        assertThrows(ParserException.class, () -> parser.parseToString(null));
     }
 }

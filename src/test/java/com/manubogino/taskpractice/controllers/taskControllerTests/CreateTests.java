@@ -2,6 +2,7 @@ package com.manubogino.taskpractice.controllers.taskControllerTests;
 
 import com.manubogino.taskpractice.exceptions.ApiException;
 import com.manubogino.taskpractice.exceptions.BadRequestApiException;
+import com.manubogino.taskpractice.exceptions.ParserException;
 import com.manubogino.taskpractice.models.ValidationResult;
 import com.manubogino.taskpractice.models.request.TaskRequest;
 import com.manubogino.taskpractice.models.response.CreateTaskResponse;
@@ -53,7 +54,6 @@ public class CreateTests extends BaseControllerTests {
 
         assertNotNull(e.getDescription());
         assertEquals(parsedResponse, e.getDescription());
-        //verify(response, times(1)).status(HttpStatus.SC_BAD_REQUEST); que el codigo de status que devuelve la excepcion sea un badrequesrt deberia validarse cuando se testea el modelo de exceptions
     }
 
     @Test
@@ -63,7 +63,7 @@ public class CreateTests extends BaseControllerTests {
         verify(taskService, never()).addTask(any(TaskRequest.class));
     }
 
-    private void initSuccessValidation() throws ApiException {
+    private void initSuccessValidation() throws ParserException, ApiException {
         Set<ConstraintViolation<Object>> errors = new HashSet<>();
         when(validator.validate(any())).thenReturn(errors);
 
@@ -77,7 +77,7 @@ public class CreateTests extends BaseControllerTests {
         when(parser.parseToString(any(CreateTaskResponse.class))).thenReturn(parsedResponse);
     }
 
-    private void initFailedValidator() throws ApiException {
+    private void initFailedValidator() throws ParserException {
         taskRequest = new TaskRequest();
         taskRequest.setName(taskName);
         when(parser.parseToObject(any(), eq(TaskRequest.class))).thenReturn(taskRequest);

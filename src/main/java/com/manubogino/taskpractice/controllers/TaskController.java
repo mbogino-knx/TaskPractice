@@ -2,6 +2,7 @@ package com.manubogino.taskpractice.controllers;
 
 import com.manubogino.taskpractice.exceptions.ApiException;
 import com.manubogino.taskpractice.exceptions.BadRequestApiException;
+import com.manubogino.taskpractice.exceptions.ParserException;
 import com.manubogino.taskpractice.models.ValidationResult;
 import com.manubogino.taskpractice.models.request.TaskRequest;
 import com.manubogino.taskpractice.models.response.CreateTaskResponse;
@@ -33,7 +34,7 @@ public class TaskController extends BaseController {
     public Route shareTask = this::share;
     public Route getUsersByTask = this::getUsersByTask;
 
-    private String create(Request request, Response response) throws ApiException {
+    private String create(Request request, Response response) throws ParserException, ApiException {
         validateRequest(request);
         validateResponse(response);
 
