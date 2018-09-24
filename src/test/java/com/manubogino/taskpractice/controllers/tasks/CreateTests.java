@@ -1,4 +1,4 @@
-package com.manubogino.taskpractice.controllers.taskControllerTests;
+package com.manubogino.taskpractice.controllers.tasks;
 
 import com.manubogino.taskpractice.exceptions.ApiException;
 import com.manubogino.taskpractice.exceptions.BadRequestApiException;

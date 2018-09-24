@@ -1,4 +1,4 @@
-package com.manubogino.taskpractice.services.implementation;
+package com.manubogino.taskpractice.services.implementations;
 
 import com.manubogino.taskpractice.exceptions.ApiException;
 import com.manubogino.taskpractice.exceptions.NotFoundApiException;
@@ -9,7 +9,6 @@ import com.manubogino.taskpractice.models.response.TaskResponse;
 import com.manubogino.taskpractice.services.TaskService;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,7 +26,6 @@ public class TaskServiceImpl implements TaskService {
         newTask.setName(task.getName());
         newTask.setDescription(task.getDescription());
         newTask.setUserId(user);
-        newTask.setCreationDate(new Date());
 
         taskMap.put(id, newTask);
         return new CreateTaskResponse(id);

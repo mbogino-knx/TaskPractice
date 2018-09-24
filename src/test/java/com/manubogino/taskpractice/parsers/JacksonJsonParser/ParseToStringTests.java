@@ -3,7 +3,7 @@ package com.manubogino.taskpractice.parsers.JacksonJsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manubogino.taskpractice.exceptions.ParserException;
-import com.manubogino.taskpractice.parsers.implementation.JacksonJsonParser;
+import com.manubogino.taskpractice.parsers.implementations.JacksonJsonParser;
 import org.junit.Test;
 
 import java.io.IOException;

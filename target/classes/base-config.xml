@@ -3,8 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
     <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
-    <bean id="taskService" class="com.manubogino.taskpractice.services.implementation.TaskServiceImpl"/>
-    <bean id="parser" class="com.manubogino.taskpractice.parsers.implementation.JacksonJsonParser">
+    <bean id="taskService" class="com.manubogino.taskpractice.services.implementations.TaskServiceImpl"/>
+    <bean id="parser" class="com.manubogino.taskpractice.parsers.implementations.JacksonJsonParser">
         <constructor-arg ref="objectMapper"/>
     </bean>
 
