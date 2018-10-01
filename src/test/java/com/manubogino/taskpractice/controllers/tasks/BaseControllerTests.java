@@ -1,4 +1,4 @@
-package com.manubogino.taskpractice.controllers.taskControllerTests;
+package com.manubogino.taskpractice.controllers.tasks;
 
 import com.manubogino.taskpractice.controllers.TaskController;
 import com.manubogino.taskpractice.parsers.Parser;

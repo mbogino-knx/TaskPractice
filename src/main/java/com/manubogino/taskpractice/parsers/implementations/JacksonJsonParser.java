@@ -1,4 +1,4 @@
-package com.manubogino.taskpractice.parsers.implementation;
+package com.manubogino.taskpractice.parsers.implementations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.manubogino.taskpractice.exceptions.ParserException;

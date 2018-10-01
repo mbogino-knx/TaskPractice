@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
+    <context:component-scan base-package="com.manubogino.taskpractice"/>
+    <context:property-placeholder location="classpath:database.properties" ignore-unresolvable="true"/>
+
     <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
-    <bean id="taskService" class="com.manubogino.taskpractice.services.implementation.TaskServiceImpl"/>
-    <bean id="parser" class="com.manubogino.taskpractice.parsers.implementation.JacksonJsonParser">
+    <bean id="parser" class="com.manubogino.taskpractice.parsers.implementations.JacksonJsonParser">
         <constructor-arg ref="objectMapper"/>
     </bean>
 
@@ -15,9 +18,49 @@
         <constructor-arg ref="validator"/>
     </bean>
 
+    <!--Services-->
+    <bean id="taskService" class="com.manubogino.taskpractice.services.implementations.TaskServiceImpl">
+        <constructor-arg ref="taskRepository"/>
+    </bean>
+
     <!-- Validators -->
     <bean id="validationBootstrap" class="javax.validation.Validation$GenericBootstrapImpl"/>
     <bean id="validatorConfig" factory-bean="validationBootstrap" factory-method="configure"/>
     <bean id="validatorFactory" factory-bean="validatorConfig" factory-method="buildValidatorFactory"/>
     <bean id="validator" factory-bean="validatorFactory" factory-method="getValidator"/>
+
+    <!-- Repositories -->
+    <bean id="taskRepository" class="com.manubogino.taskpractice.repositories.implementations.TaskRepositoryImpl">
+        <constructor-arg ref="sessionFactory"/>
+    </bean>
+
+    <!-- Database -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <property name="driverClassName" value="${db.driver}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="annotatedClasses">
+            <list>
+                <value>com.manubogino.taskpractice.models.domain.Task</value>
+            </list>
+        </property>
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">${db.dialect}</prop>
+                <prop key="hibernate.current_session_context_class">thread</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <tx:annotation-driven transaction-manager="txManager"/>
+    <bean id="txManager" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory"/>
+    </bean>
 </beans>
