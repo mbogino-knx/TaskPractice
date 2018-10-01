@@ -7,6 +7,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,19 +49,11 @@ public class GetTests {
         when(session.createQuery(anyString(), any())).thenReturn(query);
         taskRepository.get(taskId);
         verify(session, times(1)).createQuery(anyString(), any());
+
+        ArgumentCaptor<String> queryId = ArgumentCaptor.forClass(String.class);
+        verify(session).createQuery(queryId.capture(), any());
+        assertTrue(queryId.getValue().contains(Integer.toString(taskId)));
     }
-    //que llame una  vez al session.createQuery y que esa query, contenga el id
-
-   /* @Test
-    public void getParameterShouldBeSameAsCreateQueryParameter(){
-        //when(session.createQuery(anyString(), any())).thenReturn(query);
-        taskRepository.get(taskId);
-        ArgumentCaptor<String> id = ArgumentCaptor.forClass(GetByIdSpecification.class);
-        verify(session).createQuery(id.capture());
-        assertEquals(taskId, id.getValue());
-    }*/
-    // que el objeto que le pasa al session.get sea el q le paso como parametro
-
 
     @Test
     public void getShouldReturnExceptionWhenCreateQueryReturnsException() {
@@ -82,7 +75,6 @@ public class GetTests {
         when(session.createQuery(anyString(), any())).thenReturn(query);
 
         List<Task> list = new ArrayList<>();
-
         list.add(task);
         when(query.getResultList()).thenReturn(list);
 

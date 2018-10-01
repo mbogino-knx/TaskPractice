@@ -6,29 +6,36 @@ import com.manubogino.taskpractice.models.domain.Task;
 import com.manubogino.taskpractice.models.request.TaskRequest;
 import com.manubogino.taskpractice.models.response.CreateTaskResponse;
 import com.manubogino.taskpractice.models.response.TaskResponse;
+import com.manubogino.taskpractice.repositories.TaskRepository;
 import com.manubogino.taskpractice.services.TaskService;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+@Transactional
 public class TaskServiceImpl implements TaskService {
-    private String user = "2";
+    private final TaskRepository taskRepository;
+
     //TODO -> agregar el user que corresponde
+    private String user = "2";
+    //TODO -> reemplazar por bd
     private static HashMap<Integer, Task> taskMap = new HashMap<>();
-    //ToDO -> reemplazar por bd
+
+    public TaskServiceImpl(TaskRepository taskRepository) {
+        this.taskRepository = taskRepository;
+    }
 
     @Override
     public CreateTaskResponse addTask(TaskRequest task) {
-        int id = taskMap.size() + 1; //Esto va a ser reemplazado por el id autonumerico q la BD devuelva
         Task newTask = new Task();
-        newTask.setId(id);
         newTask.setName(task.getName());
         newTask.setDescription(task.getDescription());
         newTask.setUserId(user);
 
-        taskMap.put(id, newTask);
-        return new CreateTaskResponse(id);
+        int taskId = taskRepository.add(newTask);
+        return new CreateTaskResponse(taskId);
     }
 
     @Override
@@ -49,7 +56,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     public TaskResponse getTask(int idTask) {
-        Task task = taskMap.get(idTask);
+        Task task = taskRepository.get(idTask);
+        if (task == null) {
+            return null;
+        }
         return map(task);
     }
 

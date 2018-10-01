@@ -1,23 +1,31 @@
 package com.manubogino.taskpractice.models.domain;
 
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
+@Entity
+@Table(name = "tasks")
 public class Task {
+    @Id
+    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
     @NotNull
-    @Size(min = 1, max = 100, message = "Longitud máxima 100 caracteres.")
+    @Column(name = "name", length = 100)
     private String name;
 
     @NotNull
-    @Size(min = 1, max = 100, message = "Longitud máxima 100 caracteres.")
+    @Column(name = "description", length = 100)
     private String description;
 
+    @NotNull
+    @Column(name = "userId")
     private String userId;
 
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @NotNull
+    @Column(name = "creationDate")
     private Date creationDate;
 
     public int getId() {

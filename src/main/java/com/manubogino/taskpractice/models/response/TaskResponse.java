@@ -10,7 +10,7 @@ public class TaskResponse {
     private String description;
     private String userId;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy")
     private Date creationDate;
 
     public int getId() {
@@ -29,27 +29,23 @@ public class TaskResponse {
         this.name = name;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public String getUserId() {
-        return userId;
     }
 
     public void setUserId(String user) {
         this.userId = user;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
-    }
-
     public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public String getUserId() {
+        return userId;
     }
 }

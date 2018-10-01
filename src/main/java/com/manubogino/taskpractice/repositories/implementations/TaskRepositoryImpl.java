@@ -7,7 +7,6 @@ import com.manubogino.taskpractice.specifications.SqlSpecification;
 import com.manubogino.taskpractice.specifications.implementations.GetByIdSpecification;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 
 import javax.transaction.Transactional;
@@ -18,7 +17,6 @@ import java.util.List;
 public class TaskRepositoryImpl implements TaskRepository {
     private SessionFactory sessionFactory;
     private Session session;
-    private Transaction transaction;
 
     public TaskRepositoryImpl(SessionFactory sessionFactory) {
         this.sessionFactory = sessionFactory;
@@ -26,12 +24,9 @@ public class TaskRepositoryImpl implements TaskRepository {
 
     @Override
     public int add(Task object) {
-        session = sessionFactory.openSession();
-        transaction = session.beginTransaction();
-
         object.setCreationDate(new Date());
+        session = sessionFactory.openSession();
         session.save(object);
-        transaction.commit();
         session.close();
 
         return object.getId();
@@ -55,8 +50,8 @@ public class TaskRepositoryImpl implements TaskRepository {
     @Override
     @Transactional
     public Task get(int id) {
-        Session session = sessionFactory.openSession();
         SqlSpecification getById = new GetByIdSpecification<>(id, Task.class);
+        Session session = sessionFactory.openSession();
         Query<Task> query = session.createQuery(getById.toSqlQuery(), Task.class);
         List<Task> tasks = query.getResultList();
 

@@ -5,7 +5,6 @@ import com.manubogino.taskpractice.repositories.implementations.TaskRepositoryIm
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
@@ -22,7 +21,6 @@ public class AddTests {
     private TaskRepositoryImpl taskRepository;
     private SessionFactory sessionFactory;
     private Session session;
-    private Transaction transaction;
     private Task task;
     private final String userId = "28";
     private final String description = "description";
@@ -38,10 +36,8 @@ public class AddTests {
 
         sessionFactory = mock(SessionFactory.class);
         session = mock(Session.class);
-        transaction = mock(Transaction.class);
         taskRepository = new TaskRepositoryImpl(sessionFactory);
         when(sessionFactory.openSession()).thenReturn(session);
-        when(session.beginTransaction()).thenReturn(transaction);
     }
 
     @Test
